@@ -1,0 +1,77 @@
+:host {
+    margin-top: 20px;
+    display: block;
+    position: relative;
+    width: 100%;
+}
+
+.todo-item {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+    padding: 10px 20px;
+    background-color: white;
+
+    & ~ .todo-item {
+        margin-top: 10px;
+    }
+
+    input {
+        margin-right: 10px;
+    }
+
+    .desc {
+        position: relative;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-right: 20px;
+        white-space: nowrap;
+
+        &.done::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: 1px;
+            background: #3d3d3d;
+        }
+    }
+
+    button {
+        margin-left: auto;
+        width: 50px;
+        height: 30px;
+        border-radius: 4px;
+        font-size: 17px;
+        background-color: #ff4d4d;
+        color: white;
+        border: 1px solid #eb2f06;
+        transition: background-color 200ms ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #eb2f06;
+        }
+
+        &:active {
+            background-color: #b71540;
+        }
+    }
+}
+
+.empty-box {
+    width: 100%;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #4b4b4b;
+    border-radius: 4px;
+    padding: 10px 20px;
+    background-color: white;
+}

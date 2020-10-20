@@ -1,0 +1,12 @@
+.wrapper {
+    margin-top: 10px;
+
+    .item {
+        display: inline-block;
+        color: #2f3542;
+
+        &:not(:first-child) {
+            margin-left: 10px;
+        }
+    }
+}

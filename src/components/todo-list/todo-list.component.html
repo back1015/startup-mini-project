@@ -1,0 +1,15 @@
+<ng-container *ngIf="todoItems.length > 0; else EmptyBox">
+    <div
+        *ngFor="let todoItem of todoItems"
+        class="todo-item"
+    >
+        <input type="checkbox" (click)="handleClickCheckBox(todoItem)" [checked]="todoItem.done" />
+        <div class="desc" [class.done]="todoItem.done">{{ todoItem.desc }}</div>
+        <button (click)="handleClickDelBtn(todoItem)">DEL</button>
+    </div>
+</ng-container>
+<ng-template #EmptyBox>
+    <div class="empty-box">
+        아이템이 존재하지 않습니다.
+    </div>
+</ng-template>
