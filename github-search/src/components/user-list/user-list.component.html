@@ -1,0 +1,17 @@
+<div class="wrapper" [ngSwitch]="state">
+    <ng-container *ngSwitchCase="EState.NeedUserName">
+        <h3>Search for users on GitHub!</h3>
+    </ng-container>
+    <ng-container *ngSwitchCase="EState.NoResult">
+        <h3>Oops, there are no results.</h3>
+    </ng-container>
+    <ng-container *ngSwitchCase="EState.Error">
+        <h3>Oops, something is wrong.</h3>
+    </ng-container>
+    <ng-container *ngSwitchCase="EState.Fetching">
+        <h3>Fetching....</h3>
+    </ng-container>
+    <ng-container *ngSwitchCase="EState.Success">
+        <app-user-list-item *ngFor="let user of users" [user]="user"></app-user-list-item>
+    </ng-container>
+</div>

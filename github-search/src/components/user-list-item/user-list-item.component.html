@@ -1,0 +1,11 @@
+<div class="user-wrapper">
+    <div class="user-profile">
+        <img [src]="user.avatar_url" />
+    </div>
+    <div class="user-info">
+        {{ user.login }}
+    </div>
+    <div class="user-action">
+        <button (click)="handleClickLink()">Link</button>
+    </div>
+</div>

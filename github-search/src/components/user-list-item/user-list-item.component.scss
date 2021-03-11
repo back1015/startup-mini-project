@@ -1,0 +1,38 @@
+:host {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.user-wrapper {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    padding: 0 10px;
+
+    .user-profile {
+        height: 50px;
+        width: 50px;
+
+        > img {
+            height: 50px;
+            width: 50px;
+        }
+    }
+
+    .user-info {
+        flex: 1;
+        height: 50px;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+    }
+
+    .user-action {
+        width: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

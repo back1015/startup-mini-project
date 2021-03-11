@@ -1,0 +1,18 @@
+<form 
+    class="form-wrapper" 
+    (submit)="handleSubmit()"
+    [formGroup]="searchForm"
+>
+    <div class="input-wrapper">
+        <input 
+            app-styled-input 
+            type="text" 
+            placeholder="Please enter the username for searching" 
+            formControlName="username"
+        />
+        <button type="submit">Search</button>
+    </div>
+    <div class="result-wrapper">
+        <app-user-list [state]="state" [users]="users"></app-user-list>
+    </div>
+</form>

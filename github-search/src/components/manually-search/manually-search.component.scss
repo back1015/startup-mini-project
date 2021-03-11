@@ -1,0 +1,26 @@
+:host {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.form-wrapper {
+    margin-top: 20px;
+    width: 600px;
+
+    .input-wrapper {
+        display: flex;
+
+        input {
+            flex: 1;
+        }
+
+        button {
+            margin-left: 10px;
+            width: 80px;
+        }
+    }
+}
