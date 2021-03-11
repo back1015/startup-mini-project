@@ -1,16 +1,16 @@
 <div class="wrapper">
     <div class="item">
-        <input 
-            type="checkbox" 
-            [checked]="EFilter.All === selectedFilter" 
+        <input
+            type="checkbox"
+            [checked]="EFilter.All === selectedFilter"
             (click)="handleClickFilter(EFilter.All)"
         />
         전체
     </div>
     <div class="item">
-        <input 
-            type="checkbox" 
-            [checked]="EFilter.Todo === selectedFilter" 
+        <input
+            type="checkbox"
+            [checked]="EFilter.Todo === selectedFilter"
             (click)="handleClickFilter(EFilter.Todo)"
         />
         아직
