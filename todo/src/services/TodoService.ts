@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { TodoItem } from '@src/models/TodoItem';
 import { IDService } from '@src/services/IDService';
+import { LocalStorgeServiceService } from './LocalStorgeService';
+
 export enum EFilter {
   All = 'All',
   Todo = 'Todo',
@@ -17,10 +19,13 @@ export class TodoService {
   filterTodoItems: TodoItem[] = [];
 
   // 현재 선택된 필터
-  selectedFilter = EFilter.All;
+  selectedFilter: EFilter = EFilter.All;
 
-  constructor(private idService: IDService) {
-    this.todoItems = JSON.parse(localStorage.getItem('todoItems'));
+  constructor(
+    private idService: IDService,
+    private localService: LocalStorgeServiceService
+  ) {
+    this.todoItems = this.localService.getTodos();
   }
 
   // TODO: 새로운 TodoItem를 추가하는 메서드
@@ -33,22 +38,12 @@ export class TodoService {
     // newTodo는 로컬 스토리지에 넣기 위해 오브젝트화
     const newTodo: TodoItem = {
       id: this.idService.getUniqueId(),
-      desc: desc,
+      desc,
       done: false,
     };
 
-    this.todoItems.push(newTodo);
-    localStorage.setItem('todoItems', JSON.stringify(this.todoItems));
-
-    /*     if (!desc) {
-      return;
-    }
-    this.todoItems.push(newTodo);
-    this.filterTodoItems = this.todoItems;
-
-    if (this.selectedFilter === EFilter.Todo) {
-      this.setSelectedFilter(EFilter.Todo);
-    } */
+    this.localService.setTodos(newTodo);
+    this.todoItems = this.localService.todos;
   }
 
   // TODO: 기존에 존재하던 todoItem을 삭제하는 메서드
@@ -57,7 +52,9 @@ export class TodoService {
      * id를 받아 해당 id와 일치하는 todoItem을 찾는다
      * 만약 일치하는 todoItem이 있다면 그 아이템을 리스트에서 제거한다
      */
-    this.todoItems.splice(this.todoIndexSrh(id), 1);
+    // this.todoItems.splice(this.todoIndexSrh(id), 1);
+    this.localService.removeTodos(this.todoIndexSrh(id));
+    this.todoItems = this.localService.todos;
   }
 
   // TODO: 기존에 존재하던 todoItem의 done 상태를 토글시키는 메서드
