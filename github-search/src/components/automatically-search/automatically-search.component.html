@@ -1,13 +1,13 @@
 <div class="form-wrapper">
-    <div class="input-wrapper">
-        <input 
-            app-styled-input 
-            type="text" 
-            placeholder="Please enter the username for searching" 
-            [formControl]="username"
-        />
-    </div>
-    <div class="result-wrapper">
-        <app-user-list [users]="users" [state]="state"></app-user-list>
-    </div>
+  <div class="input-wrapper">
+    <input
+      app-styled-input
+      type="text"
+      placeholder="Please enter the username for searching"
+      [formControl]="username"
+    />
+  </div>
+  <div class="result-wrapper">
+    <app-user-list [users]="users" [state]="state"></app-user-list>
+  </div>
 </div>
