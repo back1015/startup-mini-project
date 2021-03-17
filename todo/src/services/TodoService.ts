@@ -34,16 +34,16 @@ export class TodoService {
      * desc를 받아 새로운 todoItem 인스턴스를 생성
      * todoItems의 가장 마지막에 새롭게 생성한 todoItem 인스턴스 추가
      */
-
-    // newTodo는 로컬 스토리지에 넣기 위해 오브젝트화
     const newTodo: TodoItem = {
       id: this.idService.getUniqueId(),
       desc,
       done: false,
     };
-
+    if (!newTodo.desc) {
+      return;
+    }
     this.localService.setTodos(newTodo);
-    this.todoItems = this.localService.todos;
+    this.updateTodoList();
   }
 
   // TODO: 기존에 존재하던 todoItem을 삭제하는 메서드
@@ -52,9 +52,8 @@ export class TodoService {
      * id를 받아 해당 id와 일치하는 todoItem을 찾는다
      * 만약 일치하는 todoItem이 있다면 그 아이템을 리스트에서 제거한다
      */
-    // this.todoItems.splice(this.todoIndexSrh(id), 1);
     this.localService.removeTodos(this.todoIndexSrh(id));
-    this.todoItems = this.localService.todos;
+    this.updateTodoList();
   }
 
   // TODO: 기존에 존재하던 todoItem의 done 상태를 토글시키는 메서드
@@ -80,10 +79,17 @@ export class TodoService {
     } else if (filter === EFilter.Todo) {
       this.filterTodoItems = todoFilter;
       this.selectedFilter = EFilter.Todo;
+    } else {
+      console.warn('현재 선택한 filter가 없습니다.');
     }
   }
 
   todoIndexSrh(id: number): number {
     return this.todoItems.findIndex((todoItem) => todoItem.id === id);
+  }
+
+  updateTodoList(): void {
+    this.todoItems = this.localService.todos;
+    this.filterTodoItems = this.localService.todos;
   }
 }

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class IDService {
-  idx = 0;
+  idx: number = 0;
   // TODO: Unique ID를 발급하는 메서드
   getUniqueId(): number {
     /**

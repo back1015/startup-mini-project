@@ -14,7 +14,7 @@ export class TodoListComponent implements OnInit {
     /**
      * 현재 선택된 filter에 맞는 todoItems만 반환환다.
      */
-    return this.todoService.todoItems as TodoItem[];
+    return this.todoService.filterTodoItems as TodoItem[];
   }
 
   constructor(private todoService: TodoService) {}
