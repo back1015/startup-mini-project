@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 
 import { GithubApiService, IUser } from '@src/services/GithubAPIService';
 import { EState } from '@src/components/user-list/user-list.state';
@@ -18,7 +18,7 @@ export class AutomaticallySearchComponent implements OnInit, OnDestroy {
   users: IUser[] = [];
 
   // TODO: github api를 이용해 유저를 검색.
-  searchUser$: Observable<IUser[]> = this.githubApiService.searchUser('back');
+  searchUser$: Observable<IUser[]> = this.githubApiService.searchUser('back10');
 
   // TODO: search state를 변경시키는 스크림
   state$: Observable<EState>;
