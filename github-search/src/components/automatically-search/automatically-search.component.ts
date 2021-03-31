@@ -51,9 +51,8 @@ export class AutomaticallySearchComponent implements OnInit, OnDestroy {
 
     searchUser$.pipe(takeUntil(this.destroy$)).subscribe(
       (users) => {
+        this.state = EState.Success;
         this.users = users;
-
-        console.log(this.users);
       },
       () => {}
     );
