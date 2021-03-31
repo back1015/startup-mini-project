@@ -1,7 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { merge, Observable, Subject } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  share,
+  switchMap,
+  take,
+  takeUntil,
+} from 'rxjs/operators';
 
 import { GithubApiService, IUser } from '@src/services/GithubAPIService';
 import { EState } from '@src/components/user-list/user-list.state';
@@ -18,8 +27,7 @@ export class AutomaticallySearchComponent implements OnInit, OnDestroy {
   users: IUser[] = [];
 
   // TODO: github api를 이용해 유저를 검색.
-  searchUser$: Observable<IUser[]> = this.githubApiService.searchUser('back10');
-
+  searchUser$: Observable<IUser[]>;
 
   // TODO: search state를 변경시키는 스크림
   state$: Observable<EState>;
@@ -27,15 +35,52 @@ export class AutomaticallySearchComponent implements OnInit, OnDestroy {
   constructor(private githubApiService: GithubApiService) {}
 
   ngOnInit(): void {
-    // const changeQuery$: Observable<string> = this.username.valueChanges;
+    const changeQuery$: Observable<string> = this.username.valueChanges;
 
-    // TODO: searchUser$, state$가 의도대로 동작하도록 초기화 필요.
-    /*   this.state$.pipe(takeUntil(this.destroy$)).subscribe((state) => {
-      // this.state = state;
-      console.log(state);
-    }); */
+    const userInput$ = changeQuery$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      filter((query) => query.length > 0),
+      share()
+    );
 
-    this.searchUser$.pipe(takeUntil(this.destroy$)).subscribe(
+    const searchUser$ = userInput$.pipe(
+      switchMap((query) => this.githubApiService.searchUser(query).pipe()),
+      share()
+    );
+
+    searchUser$.pipe(takeUntil(this.destroy$)).subscribe(
+      (users) => {
+        this.users = users;
+
+        console.log(this.users);
+      },
+      () => {}
+    );
+
+    /* const startSearching$ = changeQuery$.pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      filter((query) => query.length > 0),
+      share()
+    ); */
+    /*
+    const stopSearching$ = changeQuery$.pipe(
+      filter((query) => query.length === 0),
+      share()
+    );
+
+
+    merge<EState>(
+      startSearching$.pipe(map(() => EState.Fetching)),
+      stopSearching$.pipe(map(() => EState.NeedUserName))
+    )
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((state) => {
+        this.state = state;
+      });
+
+    searchUser$.pipe(takeUntil(this.destroy$)).subscribe(
       (users) => {
         this.users = users;
         this.state = users.length === 0 ? EState.NoResult : EState.Success;
@@ -43,7 +88,7 @@ export class AutomaticallySearchComponent implements OnInit, OnDestroy {
       () => {
         this.state = EState.Error;
       }
-    );
+    ); */
   }
 
   ngOnDestroy(): void {
