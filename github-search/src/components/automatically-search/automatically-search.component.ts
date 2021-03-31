@@ -36,14 +36,12 @@ export class AutomaticallySearchComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const changeQuery$: Observable<string> = this.username.valueChanges;
-
     const userInput$ = changeQuery$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
       filter((query) => query.length > 0),
       share()
     );
-
     const searchUser$ = userInput$.pipe(
       switchMap((query) => this.githubApiService.searchUser(query).pipe()),
       share()
@@ -51,8 +49,8 @@ export class AutomaticallySearchComponent implements OnInit, OnDestroy {
 
     searchUser$.pipe(takeUntil(this.destroy$)).subscribe(
       (users) => {
-        this.state = EState.Success;
         this.users = users;
+        this.state = EState.Success;
       },
       () => {}
     );
