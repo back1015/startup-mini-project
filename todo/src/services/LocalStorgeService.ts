@@ -1,5 +1,3 @@
-import { ThrowStmt } from '@angular/compiler';
-import { i18nMetaToJSDoc } from '@angular/compiler/src/render3/view/i18n/meta';
 import { Injectable } from '@angular/core';
 import { TodoItem } from '@src/models/TodoItem';
 

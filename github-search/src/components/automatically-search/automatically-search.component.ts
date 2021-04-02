@@ -36,56 +36,23 @@ export class AutomaticallySearchComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const changeQuery$: Observable<string> = this.username.valueChanges;
+
     const userInput$ = changeQuery$.pipe(
       debounceTime(500),
       distinctUntilChanged(),
-      filter((query) => query.length > 0),
+      filter((v) => v.length > 0),
       share()
     );
+
     const searchUser$ = userInput$.pipe(
-      switchMap((query) => this.githubApiService.searchUser(query).pipe()),
+      switchMap((v) => this.githubApiService.searchUser(v).pipe()),
       share()
     );
 
-    searchUser$.pipe(takeUntil(this.destroy$)).subscribe(
-      (users) => {
-        this.users = users;
-        this.state = EState.Success;
-      },
-      () => {}
-    );
-
-    /* const startSearching$ = changeQuery$.pipe(
-      debounceTime(1000),
-      distinctUntilChanged(),
-      filter((query) => query.length > 0),
-      share()
-    ); */
-    /*
-    const stopSearching$ = changeQuery$.pipe(
-      filter((query) => query.length === 0),
-      share()
-    );
-
-
-    merge<EState>(
-      startSearching$.pipe(map(() => EState.Fetching)),
-      stopSearching$.pipe(map(() => EState.NeedUserName))
-    )
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((state) => {
-        this.state = state;
-      });
-
-    searchUser$.pipe(takeUntil(this.destroy$)).subscribe(
-      (users) => {
-        this.users = users;
-        this.state = users.length === 0 ? EState.NoResult : EState.Success;
-      },
-      () => {
-        this.state = EState.Error;
-      }
-    ); */
+    searchUser$.pipe(takeUntil(this.destroy$)).subscribe((users) => {
+      this.users = users;
+      this.state = EState.Success;
+    });
   }
 
   ngOnDestroy(): void {
