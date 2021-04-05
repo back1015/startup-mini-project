@@ -1,27 +1,24 @@
-import { createReducer, on, Action } from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 import { getTodosList } from '../actions/todos.actions';
-import { TodoItem } from '../../models/TodoItem';
-
 import seedTodoItem from '@src/seed/todo-item.json';
-
-import { IDService } from '@src/services/IDService';
+import { TodoItem } from '@src/models/TodoItem';
 
 export interface TodoListState {
-  TodoItems: TodoItem;
+  todoItems: TodoItem[];
 }
 
 export const initialState: TodoListState = {
-  TodoItems: null,
+  todoItems: [],
 };
 
 const _todoReducer = createReducer(
   initialState,
-  on(getTodosList, (state, { TodoItems }) => ({
+  on(getTodosList, (state) => ({
     ...state,
-    TodoItems
-  })
+    todoItems: seedTodoItem,
+  }))
 );
 
-export function todoReducer(state, action) {
+export function todoReducer(state = initialState, action: Action) {
   return _todoReducer(state, action);
 }
