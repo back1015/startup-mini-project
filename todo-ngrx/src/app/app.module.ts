@@ -15,12 +15,8 @@ import { TodoListFilterComponent } from '@src/components/todo-list-filter/todo-l
     TodoListComponent,
     TodoListFilterComponent,
   ],
-  imports: [
-    BrowserModule,
-    CommonModule,
-    ReactiveFormsModule,
-  ],
+  imports: [BrowserModule, CommonModule, ReactiveFormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
