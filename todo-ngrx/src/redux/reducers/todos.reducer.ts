@@ -1,7 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
-import { getTodosList } from '../actions/todos.actions';
-import seedTodoItem from '@src/seed/todo-item.json';
 import { TodoItem } from '@src/models/TodoItem';
+import { getTodosList, addTodo } from '../actions/todos.actions';
 
 export interface TodoListState {
   todoItems: TodoItem[];
@@ -11,14 +10,17 @@ export const initialState: TodoListState = {
   todoItems: [],
 };
 
-const _todoReducer = createReducer(
+const reducer = createReducer(
   initialState,
   on(getTodosList, (state) => ({
     ...state,
-    todoItems: seedTodoItem,
+  })),
+  on(addTodo, (state, { item }) => ({
+    ...state,
+    todoItems: state.todoItems.concat(item),
   }))
 );
 
 export function todoReducer(state = initialState, action: Action) {
-  return _todoReducer(state, action);
+  return reducer(state, action);
 }

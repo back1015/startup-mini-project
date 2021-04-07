@@ -5,7 +5,7 @@ import { IDService } from '@src/services/IDService';
 import seedTodoItem from '@src/seed/todo-item.json';
 import { Store } from '@ngrx/store';
 import { IAppState } from '@src/app/app.module';
-import { getTodosList } from '@src/redux/actions/todos.actions';
+import { addTodo, getTodosList } from '@src/redux/actions/todos.actions';
 import { Observable } from 'rxjs';
 
 export enum EFilter {
@@ -32,7 +32,9 @@ export class TodoService {
 
   addTodoItem(desc: string) {
     const newTodoItem = new TodoItem(this.idService.getUniqueId(), desc);
-    this.todoItems.push(newTodoItem);
+
+    this.store.dispatch(addTodo({ item: newTodoItem }));
+    // this.todoItems.push(newTodoItem);
   }
 
   deleteTodoItem(id: number) {
