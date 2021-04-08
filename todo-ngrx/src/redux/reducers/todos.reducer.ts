@@ -1,13 +1,16 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { TodoItem } from '@src/models/TodoItem';
+import { EFilter } from '@src/services/TodoService';
 import * as actions from '../actions/todos.actions';
 
 export interface TodoListState {
   todoItems: TodoItem[];
+  selectedFilter: EFilter;
 }
 
 export const initialState: TodoListState = {
   todoItems: [],
+  selectedFilter: EFilter.All,
 };
 
 const reducer = createReducer(
@@ -33,7 +36,13 @@ const reducer = createReducer(
       }
       return todo;
     }),
-  }))
+  })),
+  on(actions.updateSelectedFilter, (state, { filter }) => {
+    return {
+      ...state,
+      selectedFilter: filter,
+    };
+  })
 );
 
 export function todoReducer(state = initialState, action: Action) {
