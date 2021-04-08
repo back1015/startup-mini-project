@@ -1,27 +1,33 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { IAppState } from '@src/app/app.module';
 
 import { TodoService, EFilter } from '@src/services/TodoService';
 
 @Component({
-    selector: 'app-todo-list-filter',
-    templateUrl: './todo-list-filter.component.html',
-    styleUrls: ['./todo-list-filter.component.scss'],
+  selector: 'app-todo-list-filter',
+  templateUrl: './todo-list-filter.component.html',
+  styleUrls: ['./todo-list-filter.component.scss'],
 })
 export class TodoListFilterComponent {
+  selectedFilter = EFilter.All;
 
-    get selectedFilter() {
-        return this.todoService.selectedFilter;
-    }
+  get EFilter() {
+    return EFilter;
+  }
 
-    get EFilter() {
-        return EFilter;
-    }
+  constructor(
+    private todoService: TodoService,
+    private store: Store<IAppState>
+  ) {}
 
-    constructor(
-        private todoService: TodoService,
-    ) { }
+  ngOnInit() {
+    this.store
+      .select((state) => state.todo.selectedFilter)
+      .subscribe((filter) => (this.selectedFilter = filter));
+  }
 
-    handleClickFilter(filter: EFilter) {
-        this.todoService.setSelectedFilter(filter);
-    }
+  handleClickFilter(filter: EFilter) {
+    this.todoService.setSelectedFilter(filter);
+  }
 }
