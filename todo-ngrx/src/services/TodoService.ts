@@ -35,7 +35,6 @@ export class TodoService {
   }
 
   deleteTodoItem(id: number): void {
-    this.todoItems = this.todoItems.filter((todoItem) => todoItem.id !== id);
     this.store.dispatch(deleteTodo({ id }));
   }
 
