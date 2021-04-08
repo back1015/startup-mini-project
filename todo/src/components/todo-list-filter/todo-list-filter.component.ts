@@ -9,7 +9,7 @@ import { TodoService, EFilter } from '@src/services/TodoService';
 })
 export class TodoListFilterComponent {
 
-    get selectedFilter() {
+    get selectedFilter(): EFilter {
         return this.todoService.selectedFilter;
     }
 
@@ -23,10 +23,11 @@ export class TodoListFilterComponent {
 
     // TODO: Filter 아이템을 클릭했을 때 호출되는 메서드
     handleClickFilter(filter: EFilter): void {
-        this.todoService.setSelectedFilter(filter);
         /**
          * 클릭한 필터가 반영되도록
          * todoService의 setSelectedFilter 메서드를 호출한다
          */
+        this.todoService.setSelectedFilter(filter);
+
     }
 }

@@ -14,7 +14,7 @@ import { TodoListFilterComponent } from '@src/components/todo-list-filter/todo-l
     InputFormComponent,
     TodoListComponent,
     TodoListFilterComponent,
-   ],
+  ],
   imports: [
     BrowserModule,
     CommonModule,

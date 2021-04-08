@@ -1,51 +1,62 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { merge, Observable, Subject } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  map,
+  share,
+  switchMap,
+  take,
+  takeUntil,
+} from 'rxjs/operators';
 
-import { IUser } from '@src/services/GithubAPIService';
+import { GithubApiService, IUser } from '@src/services/GithubAPIService';
 import { EState } from '@src/components/user-list/user-list.state';
 
 @Component({
-    templateUrl: './automatically-search.component.html',
-    styleUrls: ['./automatically-search.component.scss'],
+  templateUrl: './automatically-search.component.html',
+  styleUrls: ['./automatically-search.component.scss'],
 })
 export class AutomaticallySearchComponent implements OnInit, OnDestroy {
-    destroy$ = new Subject<void>();
+  destroy$ = new Subject<void>();
 
-    username = new FormControl('');
-    state = EState.NeedUserName;
-    users: IUser[] = [];
+  username = new FormControl('');
+  state = EState.NeedUserName;
+  users: IUser[] = [];
 
-    // TODO: github api를 이용해 유저를 검색.
-    searchUser$: Observable<IUser[]>;
+  // TODO: github api를 이용해 유저를 검색.
+  searchUser$: Observable<IUser[]>;
 
-    // TODO: search state를 변경시키는 스크림
-    state$: Observable<EState>;
+  // TODO: search state를 변경시키는 스크림
+  state$: Observable<EState>;
 
-    ngOnInit() {
-        // TODO: searchUser$, state$가 의도대로 동작하도록 초기화 필요.
+  constructor(private githubApiService: GithubApiService) {}
 
-        // this.state$.pipe(
-        //     takeUntil(this.destroy$),
-        // ).subscribe((state) => {
-        //     this.state = state;
-        // });
+  ngOnInit(): void {
+    const changeQuery$: Observable<string> = this.username.valueChanges;
 
-        // this.searchUser$.pipe(
-        //     takeUntil(this.destroy$),
-        // ).subscribe(
-        //     (users) => {
-        //         this.users = users;
-        //         this.state = users.length === 0 ? EState.NoResult : EState.Success;
-        //     },
-        //     () => {
-        //         this.state = EState.Error;
-        //     },
-        // );
-    }
+    const userInput$ = changeQuery$.pipe(
+      debounceTime(500),
+      distinctUntilChanged(),
+      filter((v) => v.length > 0),
+      share()
+    );
 
-    ngOnDestroy() {
-        this.destroy$.next();
-        this.destroy$.complete();
-    }
+    const searchUser$ = userInput$.pipe(
+      switchMap((v) => this.githubApiService.searchUser(v).pipe()),
+      share()
+    );
+
+    searchUser$.pipe(takeUntil(this.destroy$)).subscribe((users) => {
+      this.users = users;
+      this.state = EState.Success;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }
