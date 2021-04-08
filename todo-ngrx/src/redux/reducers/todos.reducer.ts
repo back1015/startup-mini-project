@@ -1,11 +1,6 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { TodoItem } from '@src/models/TodoItem';
-import {
-  getTodosList,
-  addTodo,
-  deleteTodo,
-  toggleDoneSatus,
-} from '../actions/todos.actions';
+import * as actions from '../actions/todos.actions';
 
 export interface TodoListState {
   todoItems: TodoItem[];
@@ -17,18 +12,18 @@ export const initialState: TodoListState = {
 
 const reducer = createReducer(
   initialState,
-  on(getTodosList, (state) => ({
+  on(actions.getTodosList, (state) => ({
     ...state,
   })),
-  on(addTodo, (state, { todo }) => ({
+  on(actions.addTodo, (state, { todo }) => ({
     ...state,
     todoItems: state.todoItems.concat(todo),
   })),
-  on(deleteTodo, (state, { id }) => ({
+  on(actions.deleteTodo, (state, { id }) => ({
     ...state,
     todoItems: state.todoItems.filter((item) => item.id !== id),
   })),
-  on(toggleDoneSatus, (state, { id }) => ({
+  on(actions.toggleDoneSatus, (state, { id }) => ({
     ...state,
     // 상태 값을 변경 해야되는데..
     // 현재 상태 값을 바로 변경 하면 문제가 발생된다. 항상 새로운 값으로 반환해주자.
