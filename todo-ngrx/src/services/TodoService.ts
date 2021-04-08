@@ -8,6 +8,7 @@ import {
   deleteTodo,
   getTodosList,
   toggleDoneSatus,
+  updateSelectedFilter,
 } from '@src/redux/actions/todos.actions';
 import { Observable } from 'rxjs';
 
@@ -21,7 +22,6 @@ export enum EFilter {
 })
 export class TodoService {
   todoItems: TodoItem[];
-  selectedFilter = EFilter.All;
   todoItems$: Observable<TodoItem[]> = this.store.select('todo', 'todoItems');
 
   constructor(private idService: IDService, private store: Store<IAppState>) {
@@ -49,6 +49,6 @@ export class TodoService {
   }
 
   setSelectedFilter(filter: EFilter): void {
-    this.selectedFilter = filter;
+    this.store.dispatch(updateSelectedFilter({ filter }));
   }
 }
